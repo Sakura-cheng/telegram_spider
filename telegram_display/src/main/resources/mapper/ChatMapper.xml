@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace：理解成实现类的全路径（包名+类名）-->
+<mapper namespace="com.milulost.telegram_display.mapper.ChatMapper">
+    <select id="findAll" resultType="message">
+        select * from message where (to_id = #{userId} and from_id = #{chatUserId}) or (from_id = #{userId} and to_id = #{chatUserId})
+    </select>
+</mapper>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace：理解成实现类的全路径（包名+类名）-->
+<mapper namespace="com.milulost.telegram_display.mapper.GroupMapper">
+    <select id="findAllByUserId" resultType="group">
+        select * from group_ where user_id = #{userId}
+    </select>
+
+    <select id="findUserByGroupId" resultType="Integer">
+        select user_id from group_user where group_id = #{groupId}
+    </select>
+</mapper>
