@@ -1,10 +1,12 @@
 .idea
 __pycache__
 *.txt
+*.cmd
+mvnw
 
 HELP.md
 target/
-!.mvn/wrapper/maven-wrapper.jar
+.mvn/
 !**/src/main/**
 !**/src/test/**
 
