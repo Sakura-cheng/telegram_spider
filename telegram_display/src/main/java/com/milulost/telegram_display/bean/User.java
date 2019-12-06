@@ -8,6 +8,7 @@ public class User implements Serializable {
     private Integer user_id;
     private String first_name;
     private String last_name;
+    private String username;
     private Integer bot;
 
     public Integer getId() {
@@ -50,6 +51,14 @@ public class User implements Serializable {
         this.last_name = last_name;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public Integer getBot() {
         return bot;
     }
@@ -66,6 +75,7 @@ public class User implements Serializable {
                 ", user_id=" + user_id +
                 ", first_name='" + first_name + '\'' +
                 ", last_name='" + last_name + '\'' +
+                ", username='" + username + '\'' +
                 ", bot=" + bot +
                 '}';
     }

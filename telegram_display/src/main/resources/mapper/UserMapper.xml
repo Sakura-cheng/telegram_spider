@@ -12,4 +12,8 @@
     <select id="findUserById" resultType="user">
         select * from user where user_id = #{id}
     </select>
+
+    <select id="findUserByPhone" resultType="user">
+        select * from user where phone= #{phone}
+    </select>
 </mapper>

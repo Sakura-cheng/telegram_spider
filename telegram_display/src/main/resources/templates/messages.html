@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+</head>
+<body>
+
+<!-- 内容主体区域 -->
+<div class="layui-container">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>消息详情 - <a th:href="@{/index}" style="color: #009688;">返回首页</a></legend>
+    </fieldset>
+    <table class="layui-hide" id="user" lay-filter="test"></table>
+</div>
+
+<!-- 引入组件库 -->
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+    layui.use(['table', 'layer'], function () {
+        var table = layui.table;
+
+        table.render({
+            elem: '#user'
+            , url: '/api/message&userId=' + [[${userId}]] + '&chatUserId=' + [[${chatUserId}]]
+            , cellMinWidth: 80
+            , toolbar: true
+            , title: '手机号为' + [[${user.phone}]] + '和userId为' + [[${chatUserId}]] + '的message详情表'
+            , cols: [
+                [
+                    {field: 'id', title: 'ID'},
+                    {field: 'message_id', title: 'message_id'},
+                    {field: 'message', title: 'message'},
+                    {field: 'date', title: 'date'},
+                    {field: 'from_id', title: 'from_id'},
+                    {field: 'to_id', title: 'to_id'}
+                ]
+            ]
+            , page: true
+            , response: {
+                statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.AlgorithmConstraints;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -24,10 +26,27 @@ public class UserController {
     private ChannelService channelService;
     @Autowired
     private GroupService groupService;
+    @Autowired
+    private PhoneService phoneService;
+
+    @RequestMapping("/phones")
+    public ResultJson<List<Phone>> findPhones() {
+        List<Phone> phones = phoneService.findAll();
+        return new ResultJson<>(200, "success", phones.size(), phones);
+    }
 
     @RequestMapping("/users")
-    public List<User> findUsers() {
-        return userService.findAll();
+    public ResultJson<List<User>> findUsers() {
+        List<User> users = userService.findAll();
+        return new ResultJson<>(200, "success", users.size(), users);
+    }
+
+    @RequestMapping("/user&phone={phone}")
+    public ResultJson<List<User>> findUserByPhone(@PathVariable("phone") String phone) {
+        List<User> users = new ArrayList<>();
+        User user = userService.findUserByPhone(phone);
+        users.add(user);
+        return new ResultJson<>(200, "success", users.size(), users);
     }
 
     /***
@@ -36,8 +55,11 @@ public class UserController {
      * @return
      */
     @RequestMapping("/user&userId={id}")
-    public User findUserById(@PathVariable("id") Integer id) {
-        return userService.findUserById(id);
+    public ResultJson<List<User>> findUserById(@PathVariable("id") Integer id) {
+        List<User> users = new ArrayList<>();
+        User user = userService.findUserById(id);
+        users.add(user);
+        return new ResultJson<>(200, "success", users.size(), users);
     }
 
     /***
@@ -46,8 +68,9 @@ public class UserController {
      * @return
      */
     @RequestMapping("/authorization&userId={userId}")
-    public List<Authorization> findAuthorizationByUserId(@PathVariable("userId") Integer userId) {
-        return authorizationService.findByUserId(userId);
+    public ResultJson<List<Authorization>> findAuthorizationByUserId(@PathVariable("userId") Integer userId) {
+        List<Authorization> authorizationList = authorizationService.findByUserId(userId);
+        return new ResultJson<>(200, "success", authorizationList.size(), authorizationList);
     }
 
     /***
@@ -56,50 +79,64 @@ public class UserController {
      * @return
      */
     @RequestMapping("/contact&userId={userId}")
-    public List<User> findContactByUserId(@PathVariable("userId") Integer userId) {
+    public ResultJson<List<User>> findContactByUserId(@PathVariable("userId") Integer userId) {
         List<Integer> userIdList = contactService.findByUserId(userId);
         List<User> userList = new ArrayList<>();
         for (Integer id : userIdList) {
             User user = userService.findUserById(id);
             userList.add(user);
         }
-        return userList;
+        return new ResultJson<>(200, "success", userList.size(), userList);
+    }
+    @RequestMapping("/chat&userId={userId}")
+    public ResultJson<List<User>> findChatByUserId(@PathVariable("userId") Integer userId) {
+        List<Integer> userIdList = messageService.findChatByUserId(userId);
+        List<User> userList = new ArrayList<>();
+        for (Integer id : userIdList) {
+            User user = userService.findUserById(id);
+            userList.add(user);
+        }
+        return new ResultJson<>(200, "success", userList.size(), userList);
     }
 
+
     @RequestMapping("/message&userId={userId}&chatUserId={chatUserId}")
-    public List<Message> findMessageByFromIdAndToId(@PathVariable("userId") Integer userId, @PathVariable("chatUserId") Integer chatUserId) {
-        return messageService.findAll(userId, chatUserId);
+    public ResultJson<List<Message>> findMessageByFromIdAndToId(@PathVariable("userId") Integer userId, @PathVariable("chatUserId") Integer chatUserId) {
+        List<Message> messageList = messageService.findAll(userId, chatUserId);
+        return new ResultJson<>(200, "success", messageList.size(), messageList);
     }
 
     @RequestMapping("/channel&userId={userId}")
-    public List<Channel> findChannelByUserId(@PathVariable("userId") Integer userId) {
-        return channelService.findAllByUserId(userId);
+    public ResultJson<List<Channel>> findChannelByUserId(@PathVariable("userId") Integer userId) {
+        List<Channel> channelList = channelService.findAllByUserId(userId);
+        return new ResultJson<>(200, "success", channelList.size(), channelList);
     }
 
     @RequestMapping("/channelUser&channelId={channelId}")
-    public List<User> findChannelUser(@PathVariable("channelId") Integer channelId) {
+    public ResultJson<List<User>> findChannelUser(@PathVariable("channelId") Integer channelId) {
         List<Integer> userIdList = channelService.findUserByChannelId(channelId);
         List<User> userList = new ArrayList<>();
         for (Integer id : userIdList) {
             User user = userService.findUserById(id);
             userList.add(user);
         }
-        return userList;
+        return new ResultJson<>(200, "success", userList.size(), userList);
     }
 
     @RequestMapping("/group&userId={userId}")
-    public List<Group> findGroupByUserId(@PathVariable("userId") Integer userId) {
-        return groupService.findAllByUserId(userId);
+    public ResultJson<List<Group>> findGroupByUserId(@PathVariable("userId") Integer userId) {
+        List<Group> groupList = groupService.findAllByUserId(userId);
+        return new ResultJson<>(200, "success", groupList.size(), groupList);
     }
 
     @RequestMapping("/groupUser&groupId={groupId}")
-    public List<User> findGroupUser(@PathVariable("groupId") Integer groupId) {
+    public ResultJson<List<User>> findGroupUser(@PathVariable("groupId") Integer groupId) {
         List<Integer> userIdList = groupService.findUserByGroupId(groupId);
         List<User> userList = new ArrayList<>();
         for (Integer id : userIdList) {
             User user = userService.findUserById(id);
             userList.add(user);
         }
-        return userList;
+        return new ResultJson<>(200, "success", userList.size(), userList);
     }
 }

@@ -22,4 +22,9 @@ public class UserServiceImpl implements UserService {
     public User findUserById(Integer id) {
         return userMapper.findUserById(id);
     }
+
+    @Override
+    public User findUserByPhone(String phone) {
+        return userMapper.findUserByPhone(phone);
+    }
 }

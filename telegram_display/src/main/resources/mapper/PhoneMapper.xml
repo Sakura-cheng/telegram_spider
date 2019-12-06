@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace：理解成实现类的全路径（包名+类名）-->
+<mapper namespace="com.milulost.telegram_display.mapper.PhoneMapper">
+    <select id="findAll" resultType="phone">
+        select * from phone;
+    </select>
+
+    <insert id="insert" parameterType="phone">
+        insert into phone (phone, status, category) values (#{phone}, #{status}, #{category})
+    </insert>
+</mapper>

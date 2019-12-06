@@ -8,4 +8,12 @@
     <select id="findAll" resultType="message">
         select * from message where (to_id = #{userId} and from_id = #{chatUserId}) or (from_id = #{userId} and to_id = #{chatUserId})
     </select>
+
+    <select id="findFromIdByUserId" resultType="Integer">
+        select distinct from_id from message where to_id = #{userId}
+    </select>
+
+    <select id="findToIdByUserId" resultType="Integer">
+        select distinct to_id from message where from_id = #{userId}
+    </select>
 </mapper>

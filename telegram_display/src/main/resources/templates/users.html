@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+</head>
+<body>
+
+<!-- 内容主体区域 -->
+<div class="layui-container">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>成员详情 - <a th:href="@{/index}" style="color: #009688;">返回首页</a></legend>
+    </fieldset>
+    <table class="layui-hide" id="user" lay-filter="user"></table>
+</div>
+
+<!-- 引入组件库 -->
+<script th:src="@{/layui/layui.js}"></script>
+
+<script type="text/html" id="barUser">
+    <a class="layui-btn layui-btn-xs" lay-event="userDetail">查看详情</a>
+</script>
+
+<script th:if="${channelId}">
+    var api = '/api/channelUser&channelId=' + [[${channelId}]];
+    var title = 'channelId为' + [[${channelId}]] + '的成员详情表'
+</script>
+<script th:if="${groupId}">
+    var api = '/api/groupUser&groupId=' + [[${groupId}]]
+    var title = 'groupId为' + [[${groupId}]] + '的成员详情表'
+
+</script>
+<script>
+    layui.use(['table', 'layer'], function () {
+        var table = layui.table;
+
+        table.render({
+            elem: '#user'
+            , url: api
+            , cellMinWidth: 80
+            , toolbar: true
+            , title: title
+            , cols: [
+                [
+                    {field: 'id', title: 'ID'},
+                    {field: 'phone', title: 'phone'},
+                    {field: 'user_id', title: 'user_id'},
+                    {field: 'first_name', title: 'first_name'},
+                    {field: 'last_name', title: 'last_name'},
+                    {field: 'username', title: 'username'},
+                    {field: 'bot', title: 'bot'},
+                    {fixed: 'right', title: '操作', toolbar: '#barUser'}
+                ]
+            ]
+            , page: true
+            , response: {
+                statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+            }
+        });
+        table.on('tool(user)', function (obj) {
+            var data = obj.data;
+            if (obj.event === "userDetail") {
+                window.location.href = '/user?userId=' + data.user_id;
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+</head>
+<body>
+
+<!-- 内容主体区域 -->
+<div class="layui-container">
+
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>用户详情 - <a th:href="@{/index}" style="color: #009688;">返回首页</a></legend>
+    </fieldset>
+
+    <table class="layui-hide" id="user" lay-filter="test"></table>
+
+    <div class="layui-tab">
+        <ul class="layui-tab-title">
+            <li class="layui-this">用户登录设备记录</li>
+            <li>用户的contact</li>
+            <li>用户的chat</li>
+            <li>用户的channel</li>
+            <li>用户的group</li>
+        </ul>
+        <div class="layui-tab-content" style="height: 100px;">
+            <div class="layui-tab-item layui-show">
+                <table class="layui-hide" id="authorization" lay-filter="authorization"></table>
+            </div>
+            <div class="layui-tab-item">
+                <table class="layui-hide" id="contact" lay-filter="contact"></table>
+            </div>
+            <div class="layui-tab-item">
+                <table class="layui-hide" id="chat" lay-filter="chat"></table>
+            </div>
+            <div class="layui-tab-item">
+                <table class="layui-hide" id="channel" lay-filter="channel"></table>
+            </div>
+            <div class="layui-tab-item">
+                <table class="layui-hide" id="group" lay-filter="group"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 引入组件库 -->
+<script th:src="@{/layui/layui.js}"></script>
+
+<script type="text/html" id="barChannel">
+    <a class="layui-btn layui-btn-xs" lay-event="channelDetail">查看成员</a>
+</script>
+<script type="text/html" id="barGroup">
+    <a class="layui-btn layui-btn-xs" lay-event="groupDetail">查看成员</a>
+</script>
+<script type="text/html" id="barChat">
+    <a class="layui-btn layui-btn-xs" lay-event="chatDetail">查看消息记录</a>
+</script>
+<script type="text/html" id="barContact">
+    <a class="layui-btn layui-btn-xs" lay-event="userDetail">查看详情</a>
+</script>
+
+<script>
+    layui.use('table', function () {
+        var table = layui.table;
+
+        table.render({
+            elem: '#user'
+            , url: '/api/user&phone=' + [[${user.phone}]]
+            , cellMinWidth: 80
+            , toolbar: true
+            , title: '手机号为' + [[${user.phone}]] + '的用户详情表'
+            , cols: [
+                [
+                    {field: 'id', title: 'ID'},
+                    {field: 'phone', title: 'phone'},
+                    {field: 'user_id', title: 'user_id'},
+                    {field: 'first_name', title: 'first_name'},
+                    {field: 'last_name', title: 'last_name'},
+                    {field: 'username', title: 'username'},
+                    {field: 'bot', title: 'bot'},
+                ]
+            ]
+            , response: {
+                statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+            }
+        });
+    });
+</script>
+
+<script>
+    layui.use('table', function () {
+        var table = layui.table;
+
+        table.render({
+            elem: '#authorization'
+            , url: '/api/authorization&userId=' + [[${user.user_id}]]
+            , cellMinWidth: 50
+            , toolbar: true
+            , title: '手机号为' + [[${user.phone}]] + '的登录设备详情表'
+            , cols: [
+                [
+                    {field: 'id', title: 'ID'},
+                    {field: 'user_id', title: 'user_id', minWidth: 150},
+                    {field: 'hash', title: 'hash', minWidth: 200},
+                    {field: 'device_model', title: 'device_model', minWidth: 150},
+                    {field: 'platform', title: 'platform', minWidth: 150},
+                    {field: 'system_version', title: 'system_version'},
+                    {field: 'app_name', title: 'app_name', minWidth: 150},
+                    {field: 'app_version', title: 'app_version'},
+                    {field: 'date_created', title: 'date_created', minWidth: 150},
+                    {field: 'date_active', title: 'date_active', minWidth: 150},
+                    {field: 'ip', title: 'ip', minWidth: 150},
+                    {field: 'country', title: 'country', minWidth: 150},
+                    {field: 'region', title: 'region', minWidth: 150},
+                    {field: 'official_app', title: 'official_app'}
+                ]
+            ]
+            , page: true
+            , response: {
+                statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+            }
+        });
+    });
+</script>
+
+<script>
+    layui.use('table', function () {
+        var table = layui.table;
+
+        table.render({
+            elem: '#contact'
+            , url: '/api/contact&userId=' + [[${user.user_id}]]
+            , cellMinWidth: 50
+            , toolbar: true
+            , title: '手机号为' + [[${user.phone}]] + '的contact详情表'
+            , cols: [
+                [
+                    {field: 'id', title: 'ID'},
+                    {field: 'phone', title: 'phone'},
+                    {field: 'user_id', title: 'user_id'},
+                    {field: 'first_name', title: 'first_name'},
+                    {field: 'last_name', title: 'last_name'},
+                    {field: 'username', title: 'username'},
+                    {field: 'bot', title: 'bot'},
+                    {fixed: 'right', title: '操作', toolbar: '#barContact'}
+                ]
+            ]
+            , page: true
+            , response: {
+                statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+            }
+        });
+        table.on('tool(contact)', function (obj) {
+            var data = obj.data;
+            if (obj.event === "userDetail") {
+                window.location.href = '/user?userId=' + data.user_id;
+            }
+        });
+    });
+</script>
+
+<script>
+    layui.use('table', function () {
+        var table = layui.table;
+
+        table.render({
+            elem: '#chat'
+            , url: '/api/chat&userId=' + [[${user.user_id}]]
+            , cellMinWidth: 50
+            , toolbar: true
+            , title: '手机号为' + [[${user.phone}]] + '的私聊用户详情表'
+            , cols: [
+                [
+                    {field: 'id', title: 'ID'},
+                    {field: 'phone', title: 'phone'},
+                    {field: 'user_id', title: 'user_id'},
+                    {field: 'first_name', title: 'first_name'},
+                    {field: 'last_name', title: 'last_name'},
+                    {field: 'username', title: 'username'},
+                    {field: 'bot', title: 'bot'},
+                    {fixed: 'right', title: '操作', toolbar: '#barChat'}
+                ]
+            ]
+            , page: true
+            , response: {
+                statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+            }
+        });
+        table.on('tool(chat)', function (obj) {
+            var data = obj.data;
+            if (obj.event === "chatDetail") {
+                window.location.href = '/chat?userId=' + [[${user.user_id}]] + '&chatUserId=' + data.user_id;
+            }
+        });
+    });
+</script>
+
+<script>
+    layui.use('table', function () {
+        var table = layui.table;
+
+        table.render({
+            elem: '#channel'
+            , url: '/api/channel&userId=' + [[${user.user_id}]]
+            , cellMinWidth: 50
+            , toolbar: true
+            , title: '手机号为' + [[${user.phone}]] + '的channel详情表'
+            , cols: [
+                [
+                    {field: 'id', title: 'ID'},
+                    {field: 'user_id', title: 'user_id'},
+                    {field: 'channel_id', title: 'channel_id'},
+                    {field: 'title', title: 'title'},
+                    {field: 'username', title: 'username'},
+                    {field: 'participants_count', title: 'participants_count'},
+                    {fixed: 'right', title: '操作', toolbar: '#barChannel'}
+                ]
+            ]
+            , page: true
+            , response: {
+                statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+            }
+        });
+        table.on('tool(channel)', function (obj) {
+            var data = obj.data;
+            if (obj.event === "channelDetail") {
+                window.location.href = '/channelUsers?channelId=' + data.channel_id;
+            }
+        });
+    });
+</script>
+
+<script>
+    layui.use('table', function () {
+        var table = layui.table;
+
+        table.render({
+            elem: '#group'
+            , url: '/api/group&userId=' + [[${user.user_id}]]
+            , cellMinWidth: 50
+            , toolbar: true
+            , title: '手机号为' + [[${user.phone}]] + '的group详情表'
+            , cols: [
+                [
+                    {field: 'id', title: 'ID'},
+                    {field: 'user_id', title: 'user_id'},
+                    {field: 'group_id', title: 'group_id'},
+                    {field: 'title', title: 'title'},
+                    {field: 'participants_count', title: 'participants_count'},
+                    {fixed: 'right', title: '操作', toolbar: '#barGroup'}
+                ]
+            ]
+            , page: true
+            , response: {
+                statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+            }
+        });
+        table.on('tool(group)', function (obj) {
+            var data = obj.data;
+            if (obj.event === "groupDetail") {
+                window.location.href = '/groupUsers?groupId=' + data.group_id;
+            }
+        });
+    });
+</script>
+
+<script>
+    layui.use('element', function () {
+        var $ = layui.jquery
+            , element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+        //触发事件
+        var active = {
+            tabChange: function () {
+                //切换到指定Tab项
+                element.tabChange('demo', '22'); //切换到：用户管理
+            }
+        };
+    });
+</script>
+
+</body>
+</html>

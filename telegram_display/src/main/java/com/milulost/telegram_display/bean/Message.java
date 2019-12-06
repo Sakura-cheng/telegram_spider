@@ -10,6 +10,7 @@ public class Message implements Serializable {
     private String message;
     private Date date;
     private Integer from_id;
+    private Integer to_id;
 
     public Integer getId() {
         return id;
@@ -59,6 +60,14 @@ public class Message implements Serializable {
         this.from_id = from_id;
     }
 
+    public Integer getTo_id() {
+        return to_id;
+    }
+
+    public void setTo_id(Integer to_id) {
+        this.to_id = to_id;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
@@ -68,6 +77,7 @@ public class Message implements Serializable {
                 ", message='" + message + '\'' +
                 ", date=" + date +
                 ", from_id=" + from_id +
+                ", to_id=" + to_id +
                 '}';
     }
 }
