@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.AlgorithmConstraints;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +89,7 @@ public class UserController {
         }
         return new ResultJson<>(200, "success", userList.size(), userList);
     }
+
     @RequestMapping("/chat&userId={userId}")
     public ResultJson<List<User>> findChatByUserId(@PathVariable("userId") Integer userId) {
         List<Integer> userIdList = messageService.findChatByUserId(userId);
@@ -138,5 +140,27 @@ public class UserController {
             userList.add(user);
         }
         return new ResultJson<>(200, "success", userList.size(), userList);
+    }
+
+    @RequestMapping("/add")
+    public ResultJson<String> add(HttpServletRequest request) {
+        String phone = request.getParameter("phone");
+        String category = request.getParameter("category");
+        Phone addPhone = new Phone();
+        addPhone.setId(0);
+        addPhone.setPhone(phone);
+        addPhone.setStatus(-1);
+        addPhone.setCategory(Integer.parseInt(category));
+        System.out.println(addPhone);
+        phoneService.insert(addPhone);
+        return new ResultJson<>(200, "success", 1, "add success!");
+    }
+
+    @RequestMapping("/deletePhone")
+    public ResultJson<String> deletePhone(HttpServletRequest request) {
+        String phone = request.getParameter("phone");
+        System.out.println(phone);
+        phoneService.delete(phone);
+        return new ResultJson<>(200, "success", 1, "delete success!");
     }
 }

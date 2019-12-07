@@ -8,4 +8,6 @@ public interface PhoneService {
     List<Phone> findAll();
 
     void insert(Phone phone);
+
+    void delete(String phone);
 }

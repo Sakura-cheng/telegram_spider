@@ -10,6 +10,10 @@
     </select>
 
     <insert id="insert" parameterType="phone">
-        insert into phone (phone, status, category) values (#{phone}, #{status}, #{category})
+        insert into phone (phone, status, category) values (#{phone.phone}, #{phone.status}, #{phone.category})
     </insert>
+
+    <delete id="delete" parameterType="String">
+        delete from phone where phone = #{phone}
+    </delete>
 </mapper>

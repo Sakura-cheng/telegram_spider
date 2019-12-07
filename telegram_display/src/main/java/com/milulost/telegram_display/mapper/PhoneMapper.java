@@ -11,4 +11,6 @@ public interface PhoneMapper {
     List<Phone> findAll();
 
     void insert(@Param("phone") Phone phone);
+
+    void delete(@Param("phone") String phone);
 }

@@ -22,4 +22,9 @@ public class PhoneServiceImpl implements PhoneService {
     public void insert(Phone phone) {
         phoneMapper.insert(phone);
     }
+
+    @Override
+    public void delete(String phone) {
+        phoneMapper.delete(phone);
+    }
 }
