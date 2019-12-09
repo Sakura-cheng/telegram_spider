@@ -19,7 +19,17 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public List<Group> findAllByUserIdByPage(Integer start, Integer limit, Integer userId) {
+        return groupMapper.findAllByUserIdByPage(start, limit, userId);
+    }
+
+    @Override
     public List<Integer> findUserByGroupId(Integer groupId) {
         return groupMapper.findUserByGroupId(groupId);
+    }
+
+    @Override
+    public List<Integer> findUserByGroupIdByPage(Integer start, Integer limit, Integer groupId) {
+        return groupMapper.findUserByGroupIdByPage(start, limit, groupId);
     }
 }

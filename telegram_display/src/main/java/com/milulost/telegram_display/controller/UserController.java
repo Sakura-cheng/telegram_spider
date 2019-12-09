@@ -2,10 +2,12 @@ package com.milulost.telegram_display.controller;
 
 import com.milulost.telegram_display.bean.*;
 import com.milulost.telegram_display.service.*;
+import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sun.rmi.server.InactiveGroupException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.AlgorithmConstraints;
@@ -31,9 +33,13 @@ public class UserController {
     private PhoneService phoneService;
 
     @RequestMapping("/phones")
-    public ResultJson<List<Phone>> findPhones() {
+    public ResultJson<List<Phone>> findPhones(HttpServletRequest request) {
+        String page = request.getParameter("page");
+        String limt = request.getParameter("limit");
+        Integer start = (Integer.parseInt(page) - 1) * Integer.parseInt(limt);
+        List<Phone> phonesByPage = phoneService.findPhoneByPage(start, Integer.parseInt(limt));
         List<Phone> phones = phoneService.findAll();
-        return new ResultJson<>(200, "success", phones.size(), phones);
+        return new ResultJson<>(200, "success", phones.size(), phonesByPage);
     }
 
     @RequestMapping("/users")
@@ -69,9 +75,13 @@ public class UserController {
      * @return
      */
     @RequestMapping("/authorization&userId={userId}")
-    public ResultJson<List<Authorization>> findAuthorizationByUserId(@PathVariable("userId") Integer userId) {
+    public ResultJson<List<Authorization>> findAuthorizationByUserId(HttpServletRequest request, @PathVariable("userId") Integer userId) {
+        String page = request.getParameter("page");
+        String limit = request.getParameter("limit");
+        Integer start = (Integer.parseInt(page) - 1) * Integer.parseInt(limit);
+        List<Authorization> authorizationListByPage = authorizationService.findByUserIdByPage(userId, start, Integer.parseInt(limit));
         List<Authorization> authorizationList = authorizationService.findByUserId(userId);
-        return new ResultJson<>(200, "success", authorizationList.size(), authorizationList);
+        return new ResultJson<>(200, "success", authorizationList.size(), authorizationListByPage);
     }
 
     /***
@@ -80,14 +90,18 @@ public class UserController {
      * @return
      */
     @RequestMapping("/contact&userId={userId}")
-    public ResultJson<List<User>> findContactByUserId(@PathVariable("userId") Integer userId) {
+    public ResultJson<List<User>> findContactByUserId(HttpServletRequest request, @PathVariable("userId") Integer userId) {
+        String page = request.getParameter("page");
+        String limit = request.getParameter("limit");
+        Integer start = (Integer.parseInt(page) - 1) * Integer.parseInt(limit);
+        List<Integer> userIdListByPage = contactService.findByUSerIdByPage(start, Integer.parseInt(limit), userId);
         List<Integer> userIdList = contactService.findByUserId(userId);
         List<User> userList = new ArrayList<>();
-        for (Integer id : userIdList) {
+        for (Integer id : userIdListByPage) {
             User user = userService.findUserById(id);
             userList.add(user);
         }
-        return new ResultJson<>(200, "success", userList.size(), userList);
+        return new ResultJson<>(200, "success", userIdList.size(), userList);
     }
 
     @RequestMapping("/chat&userId={userId}")
@@ -103,43 +117,63 @@ public class UserController {
 
 
     @RequestMapping("/message&userId={userId}&chatUserId={chatUserId}")
-    public ResultJson<List<Message>> findMessageByFromIdAndToId(@PathVariable("userId") Integer userId, @PathVariable("chatUserId") Integer chatUserId) {
+    public ResultJson<List<Message>> findMessageByFromIdAndToId(HttpServletRequest request, @PathVariable("userId") Integer userId, @PathVariable("chatUserId") Integer chatUserId) {
+        String page = request.getParameter("page");
+        String limit = request.getParameter("limit");
+        Integer start = (Integer.parseInt(page) - 1) * Integer.parseInt(limit);
+        List<Message> messageListByPage = messageService.findMessageByPage(start, Integer.parseInt(limit), userId, chatUserId);
         List<Message> messageList = messageService.findAll(userId, chatUserId);
-        return new ResultJson<>(200, "success", messageList.size(), messageList);
+        return new ResultJson<>(200, "success", messageList.size(), messageListByPage);
     }
 
     @RequestMapping("/channel&userId={userId}")
-    public ResultJson<List<Channel>> findChannelByUserId(@PathVariable("userId") Integer userId) {
+    public ResultJson<List<Channel>> findChannelByUserId(HttpServletRequest request, @PathVariable("userId") Integer userId) {
+        String page = request.getParameter("page");
+        String limit = request.getParameter("limit");
+        Integer start = (Integer.parseInt(page) - 1) * Integer.parseInt(limit);
+        List<Channel> channelListByPage = channelService.findAllByUserIdByPage(start, Integer.parseInt(limit), userId);
         List<Channel> channelList = channelService.findAllByUserId(userId);
-        return new ResultJson<>(200, "success", channelList.size(), channelList);
+        return new ResultJson<>(200, "success", channelList.size(), channelListByPage);
     }
 
     @RequestMapping("/channelUser&channelId={channelId}")
-    public ResultJson<List<User>> findChannelUser(@PathVariable("channelId") Integer channelId) {
+    public ResultJson<List<User>> findChannelUser(HttpServletRequest request, @PathVariable("channelId") Integer channelId) {
+        String page = request.getParameter("page");
+        String limit = request.getParameter("limit");
+        Integer start = (Integer.parseInt(page) - 1) * Integer.parseInt(limit);
+        List<Integer> userIdListByPage = channelService.findUserByChannelIdByPage(start, Integer.parseInt(limit), channelId);
         List<Integer> userIdList = channelService.findUserByChannelId(channelId);
         List<User> userList = new ArrayList<>();
-        for (Integer id : userIdList) {
+        for (Integer id : userIdListByPage) {
             User user = userService.findUserById(id);
             userList.add(user);
         }
-        return new ResultJson<>(200, "success", userList.size(), userList);
+        return new ResultJson<>(200, "success", userIdList.size(), userList);
     }
 
     @RequestMapping("/group&userId={userId}")
-    public ResultJson<List<Group>> findGroupByUserId(@PathVariable("userId") Integer userId) {
+    public ResultJson<List<Group>> findGroupByUserId(HttpServletRequest request, @PathVariable("userId") Integer userId) {
+        String page = request.getParameter("page");
+        String limit = request.getParameter("limit");
+        Integer start = (Integer.parseInt(page) - 1) * Integer.parseInt(limit);
+        List<Group> groupListByPage = groupService.findAllByUserIdByPage(start, Integer.parseInt(limit), userId);
         List<Group> groupList = groupService.findAllByUserId(userId);
-        return new ResultJson<>(200, "success", groupList.size(), groupList);
+        return new ResultJson<>(200, "success", groupList.size(), groupListByPage);
     }
 
     @RequestMapping("/groupUser&groupId={groupId}")
-    public ResultJson<List<User>> findGroupUser(@PathVariable("groupId") Integer groupId) {
+    public ResultJson<List<User>> findGroupUser(HttpServletRequest request, @PathVariable("groupId") Integer groupId) {
+        String page = request.getParameter("page");
+        String limit = request.getParameter("limit");
+        Integer start = (Integer.parseInt(page) - 1) * Integer.parseInt(limit);
+        List<Integer> userIdListByPage = groupService.findUserByGroupIdByPage(start, Integer.parseInt(limit), groupId);
         List<Integer> userIdList = groupService.findUserByGroupId(groupId);
         List<User> userList = new ArrayList<>();
-        for (Integer id : userIdList) {
+        for (Integer id : userIdListByPage) {
             User user = userService.findUserById(id);
             userList.add(user);
         }
-        return new ResultJson<>(200, "success", userList.size(), userList);
+        return new ResultJson<>(200, "success", userIdList.size(), userList);
     }
 
     @RequestMapping("/add")

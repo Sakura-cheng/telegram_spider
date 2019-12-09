@@ -13,4 +13,6 @@ public interface PhoneMapper {
     void insert(@Param("phone") Phone phone);
 
     void delete(@Param("phone") String phone);
+
+    List<Phone> findPhoneByPage(@Param("start") Integer start, @Param("limit") Integer limit);
 }

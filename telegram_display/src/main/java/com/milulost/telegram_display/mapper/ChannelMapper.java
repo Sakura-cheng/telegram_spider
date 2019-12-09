@@ -10,5 +10,9 @@ import java.util.List;
 public interface ChannelMapper {
     List<Channel> findAllByUserId(@Param("userId") Integer userId);
 
+    List<Channel> findAllByUserIdByPage(@Param("start") Integer start, @Param("limit") Integer limit, @Param("userId") Integer userId);
+
     List<Integer> findUserByChannelId(@Param("channelId") Integer channelId);
+
+    List<Integer> findUserByChannelIdByPage(@Param("start") Integer start, @Param("limit") Integer limit, @Param("channelId") Integer channelId);
 }

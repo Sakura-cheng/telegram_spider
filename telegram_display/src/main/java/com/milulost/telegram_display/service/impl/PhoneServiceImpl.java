@@ -10,6 +10,11 @@ import java.util.List;
 
 @Service
 public class PhoneServiceImpl implements PhoneService {
+    @Override
+    public List<Phone> findPhoneByPage(Integer start, Integer limit) {
+        return phoneMapper.findPhoneByPage(start, limit);
+    }
+
     @Autowired
     private PhoneMapper phoneMapper;
 

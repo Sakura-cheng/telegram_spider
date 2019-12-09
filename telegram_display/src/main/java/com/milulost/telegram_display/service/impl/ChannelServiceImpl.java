@@ -19,7 +19,17 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
+    public List<Channel> findAllByUserIdByPage(Integer start, Integer limit, Integer userId) {
+        return channelMapper.findAllByUserIdByPage(start, limit, userId);
+    }
+
+    @Override
     public List<Integer> findUserByChannelId(Integer channelId) {
         return channelMapper.findUserByChannelId(channelId);
+    }
+
+    @Override
+    public List<Integer> findUserByChannelIdByPage(Integer start, Integer limit, Integer channelId) {
+        return channelMapper.findUserByChannelIdByPage(start, limit, channelId);
     }
 }

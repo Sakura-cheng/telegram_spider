@@ -10,5 +10,9 @@ import java.util.List;
 public interface GroupMapper {
     List<Group> findAllByUserId(@Param("userId") Integer userId);
 
+    List<Group> findAllByUserIdByPage(@Param("start") Integer start, @Param("limit") Integer limit, @Param("userId") Integer userId);
+
     List<Integer> findUserByGroupId(@Param("groupId") Integer groupId);
+
+    List<Integer> findUserByGroupIdByPage(@Param("start") Integer start, @Param("limit") Integer limit, @Param("groupId") Integer groupId);
 }

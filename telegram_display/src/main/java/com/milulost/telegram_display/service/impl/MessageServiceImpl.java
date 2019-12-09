@@ -26,6 +26,11 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    public List<Message> findMessageByPage(Integer start, Integer limit, Integer userId, Integer chatUserId) {
+        return chatMapper.findMessageByPage(start, limit, userId, chatUserId);
+    }
+
+    @Override
     public List<Message> findAll(Integer userId, Integer chatUserId) {
         return chatMapper.findAll(userId, chatUserId);
     }

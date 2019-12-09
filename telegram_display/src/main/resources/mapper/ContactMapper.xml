@@ -8,4 +8,8 @@
     <select id="findByUserId" resultType="Integer">
         select contact_user_id from contact where user_id = #{userId}
     </select>
+
+    <select id="findByUserIdByPage" resultType="Integer">
+        select contact_user_id from contact where user_id = #{userId} limit #{start}, #{limit}
+    </select>
 </mapper>

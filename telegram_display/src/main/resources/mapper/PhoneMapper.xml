@@ -16,4 +16,8 @@
     <delete id="delete" parameterType="String">
         delete from phone where phone = #{phone}
     </delete>
+    
+    <select id="findPhoneByPage" resultType="phone">
+        select * from phone limit #{start}, #{limit};
+    </select>
 </mapper>

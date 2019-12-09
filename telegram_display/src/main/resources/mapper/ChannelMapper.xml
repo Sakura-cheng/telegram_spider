@@ -9,7 +9,15 @@
         select * from channel where user_id = #{userId}
     </select>
 
+    <select id="findAllByUserIdByPage" resultType="channel">
+        select * from channel where user_id = #{userId} limit #{start}, #{limit}
+    </select>
+
     <select id="findUserByChannelId" resultType="Integer">
         select user_id from channel_user where channel_id = #{channelId}
+    </select>
+
+    <select id="findUserByChannelIdByPage" resultType="Integer">
+        select user_id from channel_user where channel_id = #{channelId} limit #{start}, #{limit}
     </select>
 </mapper>

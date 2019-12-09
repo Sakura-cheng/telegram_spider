@@ -9,7 +9,15 @@
         select * from group_ where user_id = #{userId}
     </select>
 
+    <select id="findAllByUserIdByPage" resultType="group">
+        select * from group_ where user_id = #{userId} limit #{start}, #{limit}
+    </select>
+
     <select id="findUserByGroupId" resultType="Integer">
         select user_id from group_user where group_id = #{groupId}
+    </select>
+
+    <select id="findUserByGroupIdByPage" resultType="Integer">
+        select user_id from group_user where group_id = #{groupId} limit #{start}, #{limit}
     </select>
 </mapper>

@@ -14,6 +14,11 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     private AuthorizationMapper authorizationMapper;
 
     @Override
+    public List<Authorization> findByUserIdByPage(Integer userId, Integer start, Integer limit) {
+        return authorizationMapper.findByUserIdByPage(userId, start, limit);
+    }
+
+    @Override
     public List<Authorization> findByUserId(Integer userId) {
         return authorizationMapper.findByUserId(userId);
     }

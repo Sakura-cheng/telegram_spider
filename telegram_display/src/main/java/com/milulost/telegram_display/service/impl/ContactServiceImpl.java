@@ -16,4 +16,9 @@ public class ContactServiceImpl implements ContactService {
     public List<Integer> findByUserId(Integer userId) {
         return contactMapper.findByUserId(userId);
     }
+
+    @Override
+    public List<Integer> findByUSerIdByPage(Integer start, Integer limit, Integer userId) {
+        return contactMapper.findByUserIdByPage(start, limit, userId);
+    }
 }

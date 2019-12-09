@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface AuthorizationMapper {
     List<Authorization> findByUserId(@Param("userId") Integer userId);
+
+    List<Authorization> findByUserIdByPage(@Param("userId") Integer userId, @Param("start") Integer start, @Param("limit") Integer limit);
 }

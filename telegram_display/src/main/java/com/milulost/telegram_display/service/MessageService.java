@@ -9,4 +9,6 @@ public interface MessageService {
     List<Message> findAll(Integer userId, Integer chatUserId);
 
     List<Integer> findChatByUserId(Integer userId);
+
+    List<Message> findMessageByPage(Integer start, Integer limit, Integer userId, Integer chatUserId);
 }

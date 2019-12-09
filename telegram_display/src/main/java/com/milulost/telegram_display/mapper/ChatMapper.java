@@ -14,4 +14,6 @@ public interface ChatMapper {
     List<Integer> findFromIdByUserId(@Param("userId") Integer userId);
 
     List<Integer> findToIdByUserId(@Param("userId") Integer userId);
+
+    List<Message> findMessageByPage(@Param("start") Integer start, @Param("limit") Integer limit, @Param("userId") Integer userId, @Param("chatUserId") Integer chatUserId);
 }

@@ -14,6 +14,26 @@
         <legend>首页 - <a id="add" href="javascript:void(0)" style="color: #009688;">添加手机号</a></legend>
     </fieldset>
     <table class="layui-hide" id="test" lay-filter="test"></table>
+
+
+    <blockquote class="layui-elem-quote layui-row" style="color: #c2c2c2;">
+        <div class="layui-col-md4">
+            status: <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;-1: 待检测<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;1: 已完成<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;500: 连接telegram服务失败<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;501: 请求验证码失败<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;502: 请求登录失败<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;503: 无法获取该手机号<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;504: 获取验证码失败
+        </div>
+        <div class="layui-col-md4">
+            category: <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;1: 仅获取一次信息<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;2: 监听
+        </div>
+    </blockquote>
+
 </div>
 
 <form class="layui-form" id="addForm" style="display:none">

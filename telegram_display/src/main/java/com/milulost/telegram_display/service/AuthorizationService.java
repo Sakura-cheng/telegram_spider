@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface AuthorizationService {
     List<Authorization> findByUserId(Integer userId);
+
+    List<Authorization> findByUserIdByPage(Integer userId, Integer start, Integer limit);
 }

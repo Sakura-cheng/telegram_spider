@@ -8,4 +8,8 @@
     <select id="findByUserId" resultType="authorization">
         select * from authorization where user_id = #{userId}
     </select>
+
+    <select id="findByUserIdByPage" resultType="authorization">
+        select * from authorization where user_id = #{userId} limit #{start}, #{limit}
+    </select>
 </mapper>

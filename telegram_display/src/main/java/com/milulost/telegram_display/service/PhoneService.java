@@ -10,4 +10,6 @@ public interface PhoneService {
     void insert(Phone phone);
 
     void delete(String phone);
+
+    List<Phone> findPhoneByPage(Integer start, Integer limit);
 }
