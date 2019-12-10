@@ -193,7 +193,6 @@ public class UserController {
     @RequestMapping("/deletePhone")
     public ResultJson<String> deletePhone(HttpServletRequest request) {
         String phone = request.getParameter("phone");
-        System.out.println(phone);
         phoneService.delete(phone);
         return new ResultJson<>(200, "success", 1, "delete success!");
     }

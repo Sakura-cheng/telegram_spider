@@ -1,4 +1,4 @@
-from telethon import TelegramClient
+from telethon import TelegramClient, events
 from telethon.sessions import StringSession
 from telethon.tl.functions.contacts import GetContactsRequest
 from telethon.tl.functions.account import GetAuthorizationsRequest
@@ -6,18 +6,23 @@ from telethon.tl.types import Channel, User, Chat
 
 import config
 from config import images_dir
-from utils import *
+from save_util import *
 from message_util import get_code
 import asyncio
 import time
+from sql_util import *
 
+# telegram的api_id和api_hash
 api_id = config.api_id
 api_hash = config.api_hash
 
 
-async def login():
+async def login(phone):
+    '''
+    登录telegram
+    :return:
+    '''
     login_flag = False
-    phone = input("请输入手机号\n")
 
     # 自动登录
     if session_file_exists(phone=phone):
@@ -34,17 +39,23 @@ async def login():
         print("连接telegram服务...")
         await client.connect()
     except OSError:
-        print("连接telegram服务失败")
+        raise RuntimeError('{"error_code": 500, "msg": "连接telegram服务失败..."}')
 
     # 手动输入验证码来登录
     if login_flag:
         print("请手动登录，等待验证码...")
-        await client.send_code_request(phone=phone, force_sms=True)
+        try:
+            await client.send_code_request(phone=phone, force_sms=True)
+        except Exception as e:
+            raise RuntimeError('{"error_code": 501, "msg": "请求验证码失败..."}')
 
         time.sleep(5)
         code = get_code(phone[2:])
         # code = input("请输入手机收到的验证码...\n")
-        await client.sign_in(phone=phone, code=code)
+        try:
+            await client.sign_in(phone=phone, code=code)
+        except Exception as e:
+            raise RuntimeError('{"error_code": 502, "msg": "请求登录失败..."}')
 
         # 保存session以便下次自动登录
         session = client.session.save()
@@ -157,14 +168,50 @@ async def get_dialogs_info(client):
             # message_list = await get_messages(client, entity)
 
 
-async def main():
+async def monitor_message(client):
+    print("增量监听...")
+    me = await client.get_me()
+
+    @client.on(events.NewMessage(incoming=True))
+    async def my_handler(event):
+        user = await event.get_sender()
+        if isinstance(user, User):
+            message = event.raw_text
+
+            if isinstance(event.message, Message):
+                message_info = save_message_info(event.message)
+                print(str(me.phone) + "收到的消息: " + message_info)
+
+                # 保存
+                # 获取发送者
+                user_info = save_user_info(user)
+                # 保存到数据库
+                # insert_user_info(user_info)
+                # insert_message(message_info, me.id)
+
+    await client.run_until_disconnected()
+
+
+async def main(phone, category):
     # 登录以获得client
-    client = await login()
-    await get_me_info(client)
-    await get_contacts_info(client)
-    await get_dialogs_info(client)
+    try:
+        client = await login(phone)
+    except Exception as e:
+        raise RuntimeError(e)
+
+    if category == 1:
+        await get_me_info(client)
+        await get_contacts_info(client)
+        await get_dialogs_info(client)
+        # # 退出登录
+        # await client.log_out()
+        # # 删除session文件
+        # delete_session_file(phone)
+    elif category == 2:
+        await monitor_message(client)
 
 
 if __name__ == '__main__':
+    phone = "test"
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(login())
+    loop.run_until_complete(login(phone))

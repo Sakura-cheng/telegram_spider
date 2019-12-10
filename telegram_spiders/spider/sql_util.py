@@ -10,14 +10,44 @@ def get_db():
         print(e)
 
 
-def get_phone():
+def get_phone(category):
+    '''
+    获取手机号
+    :return:
+    '''
     conn = get_db()
-    sql = "select phone from phone where status=0 limit 1"
+    sql = "select phone, id from phone where status=-1 and category=%s limit 1"
     cursor = conn.cursor()
-    cursor.execute(sql)
-    phone = cursor.fetchone()[0]
+    cursor.execute(sql, (category,))
+    result = cursor.fetchone()
+    if result is not None:
+        phone = result[0]
+        id = result[1]
+    else:
+        phone = None
+        id = None
     conn.close()
-    return phone
+    return phone, id
+
+
+def change_status(phone_id, status):
+    '''
+    获取所有信息后修改状态
+    :param phone:
+    :return:
+    '''
+    conn = get_db()
+    cursor = conn.cursor()
+
+    sql = "update phone set status=%s where id = %s"
+    try:
+        cursor.execute(sql, (status, phone_id))
+        conn.commit()
+    except Exception as e:
+        print(e)
+        conn.rollback()
+
+    conn.close()
 
 
 def insert_user_info(user_info):
@@ -107,21 +137,22 @@ def insert_message(message_info, user_id):
     message = message_info["message"]
     date = message_info["date"]
     from_id = message_info["from_id"]
+    to_id = message_info["to_id"]
 
     conn = get_db()
     cursor = conn.cursor()
 
-    sql = "select * from message where message_id=%s and user_id=%s"
-    cursor.execute(sql, (message_id, user_id))
+    sql = "select * from message where message_id=%s and from_id=%s and to_id=%s"
+    cursor.execute(sql, (message_id, from_id, to_id))
     m = cursor.fetchone()
 
     if m:
         print("该message已存在...")
     else:
-        sql = "insert into message (user_id, message_id, message, date, from_id) values (%s, %s, %s, str_to_date(%s," \
-              "'%%Y-%%m-%%d %%H:%%i:%%s'), %s) "
+        sql = "insert into message (user_id, message_id, message, date, from_id, to_id) values (%s, %s, %s, str_to_date(%s," \
+              "'%%Y-%%m-%%d %%H:%%i:%%s'), %s, %s) "
         try:
-            cursor.execute(sql, (user_id, message_id, message, date, from_id))
+            cursor.execute(sql, (user_id, message_id, message, date, from_id, to_id))
             conn.commit()
         except Exception as e:
             print(e)
@@ -242,8 +273,4 @@ def insert_group_user(group_id, user_id):
 
 
 if __name__ == '__main__':
-    db = get_db()
-    cursor = db.cursor()
-    sql = "insert into authorization (date_created) values (str_to_date(%s,'%%Y-%%m-%%d %%H:%%i:%%s'))"
-    cursor.execute(sql, ("2019-12-4 12:00:00",))
-    db.commit()
+    print(get_phone())
