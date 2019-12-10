@@ -70,6 +70,6 @@ python monitor_main.py
 
 ## 使用
 1. 在前端添加手机号，选择不同的功能
-![](./img/add.png)
+![add.png](./img/add.png)
 2. 等待数据获取后点击对应手机号的`查看详情`选项可以看到对应的相关信息
-![](./img/info.png)
+![info.png](./img/info.png)
