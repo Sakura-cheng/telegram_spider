@@ -6,7 +6,7 @@
 2. telegram私聊会话的消息监听
 
 ## 安装
-1. 安装python所需的第三方库，在文件根目录能找到`requirem.txt`
+1. 安装python所需的第三方库，在文件根目录能找到`requirements.txt`
 ```
 pip install -r requirements.txt
 ```
@@ -26,10 +26,12 @@ api_hash = "your api_hash"
 sessions_dir = "sessions/"
 images_dir = "images/"
 
-# 信盒api账号
-message_name = "your api name"
-message_password = "your api password"
-message_sid = 3645 # telegram项目代号
+# 斑马api账号
+message_name = ""
+message_api_name = ""
+message_password = ""
+message_sid = 737 # 项目编号
+message_token = ""
 
 # 数据库
 host = "127.0.0.1"
@@ -53,14 +55,30 @@ spring.datasource.password=123
 
 ## 运行
 ### 数据获取
-在`telegram_spiders/spider`目录下执行
+在`telegram_spiders/spider_2020`目录下执行
 
-信息获取程序
+#### 信息获取程序
 ```
 python main.py
 ```
 
-监听程序
+#### 自动注册账号并用于检测手机号是否注册
+安装夜神模拟器和目录下的telegram.apk
+
+先修改目录下的`85262999999.txt`文件，文件名为`待检测号码段end`，文件里的内容为`待检测号码段start`
+
+再修改`auto_register.py`文件中`end`的值为该txt文件的文件名
+```python
+if __name__ == '__main__':
+    end = "85262999999" // 修改其为txt文件的文件名，也即是待检测号码段end
+    main(end)
+```
+执行
+```
+python auto_register.py
+```
+
+~~监听程序~~已无用
 ```
 python monitor_main.py
 ```
