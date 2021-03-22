@@ -1,3 +1,5 @@
+# 该项目只是实验性质，代码很乱，不再维护了，也不保证还能生效，参考还是看telethon的官方文档吧:sweat:
+
 # telegram_spider
 利用telethon获取telegram信息，并前端展示
 
